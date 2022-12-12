@@ -57,7 +57,7 @@ export const Todo = () => {
     setInsertToggle((prev) => !prev);
   };
 
-  const onInsertTodo = (text) => {
+  const onInsertTodo = (text, user) => {
     if (text === "") {
       return alert("할 일을 입력해주세요.");
     } else {
@@ -65,6 +65,7 @@ export const Todo = () => {
         id: nextId,
         text,
         checked: false,
+        user: user,
       };
       setTodos((todos) => todos.concat(todo));
       nextId++;
@@ -88,11 +89,12 @@ export const Todo = () => {
     setTodos((todos) => todos.filter((todo) => todo.id !== id));
   };
 
-  const onUpdate = (id, text) => {
+  const onUpdate = (id, text, user) => {
     onInsertToggle();
-    setTodos((todos) =>
-      todos.map((todo) => (todo.id === id ? { ...todo, text } : todo))
-    );
+    setTodos((todos) => {
+      todos.map((todo) => (todo.id === id ? { ...todo, text, user } : todo));
+    });
+    console.log(todos.length);
   };
 
   return (

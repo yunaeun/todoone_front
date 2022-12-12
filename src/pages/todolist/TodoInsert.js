@@ -13,6 +13,28 @@ export const Pop = styled.div`
   align-items: center;
 `;
 
+export const Input = styled.input`
+  width: 70%;
+  height: 40px;
+  border: 2px solid #e9dac1;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+`;
+
+export const InputBox = styled.div`
+  width: 70%;
+  display: flex;
+`;
+
+export const Select = styled.select`
+  height: 40px;
+  border: 2px solid #e9dac1;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding-left: 5px;
+`;
+
 export const TodoInsert = ({
   onInsertToggle,
   onInsertTodo,
@@ -21,7 +43,7 @@ export const TodoInsert = ({
   onUpdate,
 }) => {
   const [value, setValue] = useState("");
-
+  const [user, setUser] = useState(0);
   const onChange = (e) => {
     setValue(e.target.value);
   };
@@ -38,24 +60,30 @@ export const TodoInsert = ({
       setValue(selectedTodo.text);
     }
   }, [selectedTodo]);
+
   return (
     <Pop>
       <div className="background" onClick={onInsertToggle}></div>
       <Form>
-        <form
-          onSubmit={
-            selectedTodo
-              ? () => {
-                  onUpdate(selectedTodo.id, value);
-                }
-              : onSubmit
-          }
-        >
-          <input
-            placeholder="please type"
-            value={value}
-            onChange={onChange}
-          ></input>
+        <form>
+          <InputBox>
+            <Input
+              placeholder="please type"
+              value={value}
+              onChange={onChange}
+            ></Input>
+            &nbsp;&nbsp;&nbsp;
+            <Select
+              onChange={(e) => {
+                setUser(e.target.value);
+                console.log(e.target.value);
+              }}
+            >
+              <option value={0}>나</option>
+              <option value={1}>너</option>
+              <option value={2}>우리</option>
+            </Select>
+          </InputBox>
           {selectedTodo ? (
             <div className="rewrite">
               <TiPencil
@@ -70,7 +98,14 @@ export const TodoInsert = ({
               />
             </div>
           ) : (
-            <button type="submit">
+            <button
+              type="button"
+              onClick={() => {
+                onInsertTodo(value, user);
+                setValue("");
+                onInsertToggle();
+              }}
+            >
               <MdAddCircle />
             </button>
           )}
